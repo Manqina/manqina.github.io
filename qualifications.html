@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="image.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Wise Solutions - Qualifications</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    html, body { height: 100%; margin: 0; }
+
+    /* Navbar */
+    .navbar { background-color: #2c3e50; }
+    .nav-link { color: #f1c40f !important; font-weight: bold; }
+    .nav-link:hover { color: #1abc9c !important; }
+
+    /* Fullscreen Qualifications */
+    .qualifications-page {
+      height: 100vh;
+      width: 100%;
+      background: url('book-tree-bg.png') no-repeat center center/cover;
+      position: relative;
+      color: #fff;
+    }
+
+    .qualifications-page::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); /* overlay for readability */
+    }
+
+    .qualifications-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .qualifications-content h2 {
+      font-size: 3rem;
+      margin-bottom: 30px;
+      color: #f1c40f;
+    }
+
+    /* Qualification Cards */
+    .qualification-item {
+      background-color: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 15px 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      opacity: 0; /* start hidden */
+      animation: fadeUp 1s ease forwards;
+    }
+
+    .qualification-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    }
+
+    .qualification-item h3 {
+      color: #1abc9c;
+      margin-bottom: 10px;
+    }
+
+    /* Fade-up animation */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Staggered delay */
+    .qualification-item:nth-child(1) { animation-delay: 0.3s; }
+    .qualification-item:nth-child(2) { animation-delay: 0.6s; }
+    .qualification-item:nth-child(3) { animation-delay: 0.9s; }
+    .qualification-item:nth-child(4) { animation-delay: 1.2s; }
+    .qualification-item:nth-child(5) { animation-delay: 1.5s; }
+    .qualification-item:nth-child(6) { animation-delay: 1.8s; }
+
+    /* Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .skill-card {
+      background-color: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 15px;
+      color: #fff;
+      transition: background 0.3s ease;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards;
+    }
+
+    .skill-card:hover { background-color: rgba(26,188,156,0.3); }
+    .skill-card h4 { color: #f1c40f; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">Expense Wise Solutions</a>
+
+      <!-- Hamburger menu button -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="qualifications.html">Qualifications</a></li>
+         <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+         <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Fullscreen Qualifications -->
+  <section class="qualifications-page">
+    <div class="qualifications-content">
+      <h2>Qualifications & Skills</h2>
+
+      <div class="qualification-item">
+        <h3>Diploma in IT: Software Engineering</h3>
+        <p>Currently pursuing at Nelson Mandela University, focusing on web development, system design, and modern frameworks.</p>
+      </div>
+
+      <div class="qualification-item">
+        <h3>Matric Certificate</h3>
+        <p>Completed with strong emphasis on mathematics, computer science, and problem-solving skills.</p>
+      </div>
+
+      <div class="qualification-item">
+        <h3>Virtual Work Experience Certificates</h3>
+        <p>Completed Forage programs to gain practical exposure in software engineering and professional workflows.</p>
+      </div>
+
+      <div class="qualification-item">
+        <h3>Technical Projects</h3>
+        <p>Designed finance-themed websites with animated branding and responsive layouts using Bootstrap and JavaScript.</p>
+      </div>
+
+      <div class="qualification-item">
+        <h3>Academic Coursework</h3>
+        <p>Completed modules in C# programming, SQL databases, UML diagramming, and system design, with practical assignments in .NET Core and Entity Framework.</p>
+      </div>
+
+    
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  // Get the current page filename
+  const currentPage = window.location.pathname.split("/").pop();
+
+  // Loop through all nav links
+  document.querySelectorAll(".nav-link").forEach(link => {
+    if (link.getAttribute("href") === currentPage) {
+      link.classList.add("active");   // highlight current page
+    } else {
+      link.classList.remove("active"); // remove from others
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Wise Solutions - Calculator</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="image.png">
+
+  <!-- Bootstrap & Chart.js -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+  <style>
+    body {
+      background: url('tree-bg.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #1abc9c;
+      padding-top: 70px;
+    }
+    h2, h4 { color: #f1c40f; }
+    .btn-start {
+      background-color: #1abc9c;
+      color: #fff;
+      font-weight: bold;
+      padding: 10px 25px;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+    }
+    .btn-start:hover { background-color: #16a085; }
+    .card { background-color: rgba(52, 73, 94, 0.9); border: none; }
+    .progress { height: 25px; }
+    .progress-bar { font-weight: bold; }
+    .list-group-item {
+      background-color: #2c3e50;
+      color: #1abc9c;
+    }
+    .navbar { background-color: #34495e; }
+    .navbar-brand, .nav-link {
+      color: #1abc9c !important;
+      font-weight: 600;
+    }
+    .nav-link:hover, .nav-link.active { color: #f1c40f !important; }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Expense Wise Solutions</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="start-tracking.html">Start Tracking</a></li>
+        <li class="nav-item"><a class="nav-link active" href="calculation.html">Calculator</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-5">
+  <h2 class="text-center mb-4">Expense Calculator</h2>
+
+  <!-- Income Input -->
+  <form id="incomeForm" class="mb-4 text-center">
+    <div class="mb-3">
+      <label for="incomeAmount" class="form-label">Enter Your Allowance/Salary</label>
+      <input type="number" id="incomeAmount" class="form-control" placeholder="e.g. 5000">
+    </div>
+    <button type="button" class="btn btn-start" onclick="setIncome()">Set Income</button>
+  </form>
+
+  <!-- Expense Input -->
+  <form id="expenseForm" class="mb-4 text-center" style="display:none;">
+    <div class="mb-3">
+      <label for="expenseName" class="form-label">Expense Name</label>
+      <input type="text" id="expenseName" class="form-control" placeholder="e.g. Groceries">
+    </div>
+    <div class="mb-3">
+      <label for="expenseAmount" class="form-label">Amount</label>
+      <input type="number" id="expenseAmount" class="form-control" placeholder="e.g. 500">
+    </div>
+    <button type="button" class="btn btn-start" onclick="addExpense()">Add Expense</button>
+  </form>
+
+  <!-- Results + Chart -->
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <div class="card p-3">
+        <h4>Expenses List</h4>
+        <ul id="expenseList" class="list-group list-group-flush"></ul>
+        <h4 class="mt-3">Remaining Balance: R<span id="remainingBalance">0</span></h4>
+        <div class="progress mt-3">
+          <div id="progressBar" class="progress-bar bg-success" role="progressbar" style="width: 100%;">
+            100% Remaining
+          </div>
+        </div>
+        <button class="btn btn-start mt-3" onclick="clearData()">Clear Data</button>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <!-- Light background for chart -->
+      <div class="card p-3" style="background-color:#ffffffcc; border-radius:10px;">
+        <h4 style="color:#f1c40f;">Expense Breakdown</h4>
+        <canvas id="expenseChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let income = 0;
+  let remaining = 0;
+  let expenses = [];
+  let chart;
+
+  function setIncome() {
+    const amount = parseFloat(document.getElementById('incomeAmount').value);
+    if (!isNaN(amount) && amount > 0) {
+      income = amount;
+      remaining = amount;
+      localStorage.setItem("income", income);
+      localStorage.setItem("remaining", remaining);
+      document.getElementById('remainingBalance').textContent = remaining.toFixed(2);
+      document.getElementById('incomeForm').style.display = "none";
+      document.getElementById('expenseForm').style.display = "block";
+      updateProgress();
+      updateChart();
+    } else {
+      alert("Please enter a valid income amount.");
+    }
+  }
+
+  function addExpense() {
+    const name = document.getElementById('expenseName').value;
+    const amount = parseFloat(document.getElementById('expenseAmount').value);
+
+    if (name && !isNaN(amount) && amount > 0) {
+      if (amount <= remaining) {
+        const li = document.createElement('li');
+        li.className = "list-group-item d-flex justify-content-between align-items-center";
+        li.innerHTML = `${name} <span>R${amount.toFixed(2)}</span>`;
+        document.getElementById('expenseList').appendChild(li);
+
+        remaining -= amount;
+        expenses.push({ name, amount });
+        localStorage.setItem("expenses", JSON.stringify(expenses));
+        localStorage.setItem("remaining", remaining);
+
+        document.getElementById('remainingBalance').textContent = remaining.toFixed(2);
+        updateProgress();
+        updateChart();
+
+        document.getElementById('expenseName').value = "";
+        document.getElementById('expenseAmount').value = "";
+      } else {
+        alert("Expense exceeds remaining balance!");
+      }
+    } else {
+      alert("Please enter a valid expense name and amount.");
+    }
+  }
+
+  function clearData() {
+    localStorage.clear();
+    income = 0;
+    remaining = 0;
+    expenses = [];
+    document.getElementById('expenseList').innerHTML = "";
+    document.getElementById('remainingBalance').textContent = "0";
+    document.getElementById('incomeForm').style.display = "block";
+    document.getElementById('expenseForm').style.display = "none";
+    updateProgress();
+    updateChart();
+  }
+
+  function updateProgress() {
+    if (income > 0) {
+      const percent = (remaining / income) * 100;
+      const progressBar = document.getElementById('progressBar');
+      progressBar.style.width = percent + "%";
+      progressBar.textContent = `${percent.toFixed(0)}% Remaining`;
+      progressBar.className = "progress-bar";
+      if (percent > 50) {
+        progressBar.classList.add("bg-success");
+      } else if (percent > 20) {
+        progressBar.classList.add("bg-warning");
+      } else {
+        progressBar.classList.add("bg-danger");
+      }
+    }
+  }
+
+  function updateChart() {
+    const labels = expenses.map(e => e.name).concat("Remaining");
+    const data = expenses.map(e => e.amount).concat(remaining);
+
+    if (chart) {
+      chart.destroy();
+    }
+
+    const ctx = document.getElementById('expenseChart').getContext('2d');
+    chart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: [
+            '#e74c3c', '#3498db', '#f1c40f', '#9b59b6', '#1abc9c', '#2ecc71', '#34495e'
+          ],
+
+        }]
+      }
+    });
+  }
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+
